@@ -1,0 +1,46 @@
+{
+  "name": "Diary",
+  "version": "1.0.0",
+  "description": "Bla",
+  "main": "index.js",
+  "author": "Johan Torell",
+  "license": "MIT",
+  "scripts": {
+    "dev": "watchify client/app/main.js --outfile client/bundled.js  --debug -v --poll -d -t reactify",
+    "prestart": "uglifyjs client/bundled.js -o client/bundled.js",
+    "start": "node index"
+  },
+  "dependencies": {
+    "backbone-react-component": "^0.10.0",
+    "backbone-route-control": "^0.1.0",
+    "body-parser": "^1.10.2",
+    "browserify": "^13.0.0",
+    "cookie-parser": "^1.3.3",
+    "express": "^4.11.1",
+    "express-session": "^1.13.0",
+    "mongodb": "^2.0.33",
+    "mongoose": "^4.4.12",
+    "morgan": "^1.5.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "react-router": "^2.3.0",
+    "uglify-js": "^2.6.2"
+  },
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-preset-react": "^6.5.0",
+    "babelify": "^7.2.0",
+    "backbone": "^1.3.2",
+    "jquery": "^2.2.2",
+    "react": "^0.14.8",
+    "react-dom": "^0.14.8",
+    "reactify": "^1.1.1",
+    "underscore": "^1.8.3",
+    "watchify": "^3.7.0"
+  },
+  "babel": {
+    "presets": [
+      "react"
+    ]
+  }
+}

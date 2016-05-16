@@ -1,0 +1,65 @@
+.notavailable {
+	opacity: 0.2;
+}
+
+.hidden {
+	opacity: 0;
+}
+
+span.artist {
+	font-size: 2rem;
+}
+
+.panel {
+	border: none;
+}
+
+.list-group-item {
+	border: none;
+}
+
+a.list-group-item:focus, a.list-group-item:hover, button.list-group-item:hover {
+
+}
+
+a.remove {
+	color: red;
+}
+
+a.remove:hover {
+	cursor: pointer;
+}
+
+a > h4.remove {
+	color:red;
+}
+
+a > h4.remove:hover {
+	cursor: pointer;
+}
+
+.arrange {
+	font-size: 20px;
+	cursor: pointer;
+}
+
+.hrline {
+	border-bottom: 1px solid;
+}
+
+.navbar-nav>li>a.active {
+	color: #d9230f;
+}
+.navbar-nav>li>a.vactive:hover {
+	color: #d9230f;
+}
+
+.navbar-default .navbar-nav>li>a:hover {
+	background-color: transparent;
+	color: #d9230f;
+}
+
+.socialviewlist {
+	margin-top: 5.5px;
+	margin-bottom: 5.5px;
+}
