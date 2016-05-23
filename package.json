@@ -29,6 +29,7 @@
     "react-bootstrap": "^0.29.4",
     "react-bootstrap-datetimepicker": "0.0.22",
     "react-router": "^2.3.0",
+    "reactify": "^1.1.1",
     "uglify-js": "^2.6.2"
   },
   "devDependencies": {
