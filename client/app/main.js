@@ -6,26 +6,26 @@ var HashHistory = require("react-router").hashHistory;
 var Route = require('react-router').Route;
 
 var HeaderView = require("./views/pages/HeaderView.jsx");
-var TracklistListView = require("./views/pages/TracklistListView.jsx");
-var TracksListView = require("./views/pages/TracksListView.jsx");
+var ActivityListView = require("./views/pages/ActivityListView.jsx");
 
-var TracklistViewPresenter = require("./views/pages/TracklistViewPresenter.jsx");
-var TrackViewPresenter = require("./views/pages/TrackViewPresenter.jsx");
-var AddTracklistView = require("./views/pages/AddTracklistView.jsx");
+var ActivityViewPresenter = require("./views/pages/ActivityViewPresenter.jsx");
+
+var AddActivityView = require("./views/pages/AddActivityView.jsx");
 
 var LoginViewPresenter = require("./views/login/LoginViewPresenter.jsx");
 var LogoutViewPresenter = require("./views/login/LogoutViewPresenter.jsx");
+var MapView = require("./views/pages/MapView.jsx");
+var ChatPage = require("./views/pages/ChatPage.jsx");
 
 ReactDOM.render(
 	(
 		<Router history={HashHistory} >
 			<Route path="/" component={HeaderView}>
-				<IndexRoute component={TracklistListView} />
-				<Route path="/tracks" component={TracksListView} />
-				<Route path="/tracklist/:id" component={TracklistViewPresenter} />
-				<Route path="/track/:id" component={TrackViewPresenter} />
-				
-				<Route path="/add/tracklist" component={AddTracklistView} />
+				<IndexRoute component={ActivityListView} />
+				<Route path="/activity/:id" component={ActivityViewPresenter} />
+
+				<Route path="/add/activity" component={AddActivityView} />
+				<Route path="/map" component={MapView}/>
 
 				<Route path="/login" component={LoginViewPresenter} />
 				<Route path="/logout" component={LogoutViewPresenter} />

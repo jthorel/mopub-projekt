@@ -5,10 +5,10 @@ var ButtonGroupView = require("../misc/ButtonGroupView.jsx");
 var InfoView = require("../info/InfoView.jsx");
 
 var SimpleListView = require("../list/SimpleListView.jsx");
-var ArrangeListView = require("../list/ArrangeListView.jsx");
-
-var AddTrackstoTracklistView = require("../misc/AddTrackstoTracklistView.jsx");
-
+var UserList = require("../list/UserList.jsx");
+var GoogleMap = require("../misc/GoogleMap.jsx");
+var user = require("../../models/UserModel.js");
+var ChatPage = require("./ChatPage.jsx");
 
 module.exports = React.createClass({
 
@@ -25,8 +25,16 @@ module.exports = React.createClass({
 		}
 	},
 
-	render: function(){ 
+	handleDateChange: function(value){
+		this.props.model.set('date', value);
+	},
 
+	addUser: function(){
+		this.props.model.users.add(user);
+		this.props.model.save();
+	},
+
+	render: function(){ 
 		var _this = this;
 		var methods = {
 			edit: this.edit,
@@ -38,30 +46,43 @@ module.exports = React.createClass({
 
 		return(
 			<div>
-				<div className="col-md-3" style={{borderRight: "1px solid"}}>	
-					<InfoView model={model} editing={this.state.editing} />
-					{this.props.model.createdByUser() && <ButtonGroupView methods={methods} editing={this.state.editing}/> }
+				<div className="col-md-3" style={{borderRight: "1px solid"}}>
+
+					<InfoView model={model} editing={this.state.editing} handleDateChange={this.handleDateChange}/>
+					{this.props.model.createdByUser() ? <ButtonGroupView methods={methods} editing={this.state.editing}/>
+					: user.isAuthorized() ? <button className="btn btn-success" onClick={this.addUser}>Join</button> : "" }
 											
 				</div>
 				<div className="col-md-9">
-					<h4 className="text-center">Tracks</h4>
+					<h4>Participants </h4>
 					{this.editing()}
+
+					{user.isAuthorized() ? 
+						<div>
+							<h4>Chat</h4>
+							<hr/>
+							<ChatPage channel={model.get("_id")} name={user.get("username")}/>
+						</div>
+						: "" }
 				</div>
 			</div>
 		)
 	},
+
+
 	
 	editing: function() {
 		if(this.state.editing){
 			return (
 				<div>
-					<ArrangeListView collection={this.props.model.tracks} />
-					<br/><h4 className="text-center">Add tracks to tracklist:</h4>
-					<AddTrackstoTracklistView collection={this.props.model.tracks}/>
 				</div>
 			)
 		} else {
-			return <SimpleListView collection={this.props.model.tracks} type="ordered" />
+			return <div style={{width:"100%", height:"100%"}}>
+						<UserList collection={this.props.model.users}/>
+						<GoogleMap position={this.props.model.get("position")} />
+						
+					</div>
 		}
 	},
 
@@ -77,12 +98,11 @@ module.exports = React.createClass({
 		});
 	},
 	save: function() {
-		var _this = this;
-		this.props.model.save().done(function(){
-			_this.setState({
+		this.props.model.save()
+		this.setState({
 				editing: false
 			});
-		})
+
 	},
 
 	delete: function() {

@@ -5,7 +5,7 @@ app.use(express.static('client'));
 //MONGOOSE
 var mongoose = require("mongoose");
 mongoose.set("debug", true);
-var mongoURI = process.env.MONGODB_URI || process.env.MONGOHQ_URL || "mongodb://localhost/TracklistDB";
+var mongoURI = process.env.MONGODB_URI || process.env.MONGOHQ_URL || "mongodb://localhost/ActivityDB";
 mongoose.connect(mongoURI);
 
 //BODYPARSING. Exposes req.body, where you can get params sent etc.
@@ -27,11 +27,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //DELAY - Fakes real server-latency for all requests to points defined after this (API).
-app.use(function(req, res, next){
+/*app.use(function(req, res, next){
 	setTimeout(function(){
 		next();
 	}, 500);
-})
+})*/
 
 //API Routes all the traffic to /api/ to the file ./api/Router.
 var apiRouter = require("./api/Router");

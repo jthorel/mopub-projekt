@@ -11,7 +11,12 @@ var UserModel = Backbone.Model.extend({
 
 	idAttribute: "_id",
 
-	url: "api/user",
+	defaults: {
+		password: null,
+		email: null
+	},
+
+	urlRoot: "api/user",
 
 	initialize: function(){
 		this.fetchStatus();

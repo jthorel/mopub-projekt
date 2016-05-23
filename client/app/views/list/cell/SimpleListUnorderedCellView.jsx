@@ -1,5 +1,6 @@
 var React = require("react");
 var Link = require("react-router").Link;
+var moment = require('moment');
 
 var UnorderedListCellView = React.createClass({
 
@@ -8,17 +9,23 @@ var UnorderedListCellView = React.createClass({
 	},
 
 	render: function(){
-		var href = "/" + this.props.model.get("type") + "/" + this.props.model.id;
+		var href = "/activity/" + this.props.model.id;
+		var modelicon = "/img/"+this.props.model.get("type")+".png";
 		return(
 			<Link className="list-group-item" to={href} >
 				<div className="media">
 					<div className="media-left">
-						{/*<img className="media-object" src={imgURL} style={{maxWidth:"44px"}}/>*/}
-						<span className="glyphicon glyphicon-music" style={{maxWidth:"44px", fontSize:"2rem", marginTop:"2px"}}></span>
+						<img className="media-object" src={modelicon} style={{maxWidth:"32px"}}/>
 					</div>
 					<div className="media-body">
-						<h4 className="media-heading">{this.props.model.get("title")}</h4>
-						{this.props.model.get("artist")}
+						<h4 className="media-heading">{this.props.model.get("title")} 
+							<span className="glyphicon glyphicon-user pull-right" style={{padding: "0.5em"}}>
+								{this.props.model.users.length}
+								</span>
+						</h4>
+						<span style={{fontSize: "0.8rem"}}>
+							{moment(this.props.model.get("date")).format('dddd MMMM Do YYYY HH:mm')}
+						</span>
 					</div>
 				</div>
 			</Link>

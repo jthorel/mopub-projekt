@@ -5,9 +5,17 @@ var IndexLink = require("react-router").IndexLink;
 
 var UserModel = require("../../models/UserModel.js");
 
+
 var HeaderView = React.createClass({
 	
 	mixins: [backboneMixin],
+
+
+	handleToggle: function(){
+		this.setState({
+			active: !this.state.active
+		});
+	},
 	
 	getInitialState: function() {
 		UserModel.on("all", function(){
@@ -15,7 +23,8 @@ var HeaderView = React.createClass({
 		}, this);
 		
 		return {
-			user: UserModel
+			user: UserModel,
+			active: false
 		}
 		
 	},
@@ -25,45 +34,67 @@ var HeaderView = React.createClass({
 		var user = this.state.user
 
 		if(user.isAuthorized()){
-			var toggleLogin = <li><Link to="/logout" activeClassName="active"> Log out </Link></li>;
+			var toggleLogin = <li className="nav-item">
+								<Link to="/logout" 
+									activeClassName="active"
+									onClick={this.handleToggle}> 
+									Log out 
+								</Link>
+								</li>;
 		} else {
-			var toggleLogin = <li><Link to="/login" activeClassName="active"> Log in </Link></li>;
+			var toggleLogin = <li className="nav-item"><Link to="/login" activeClassName="active" onClick={this.handleToggle}> Log in </Link></li>;
 		}
 
 		return (
-			<section className="container">
-				
-				<section className="row">
-					<nav className="navbar navbar-default">
-						<div className="container-fluid">
-							<div className="navbar-header">
-								<a href="#" className="navbar-left"><img src="./img/logo3.png" width="90px" height="41px"/></a>
-							</div>
+			<div>
+				<ul className="navigation">
+				    <li className="nav-item">
+				    	<IndexLink to="/" 
+				    		onClick={this.handleToggle} 
+				    		activeClassName="active">
+				    			Find activities
+				    	</IndexLink>
+				    </li>
 
-							<ul className="nav navbar-nav navbar-left"> 
-								<li><IndexLink to="/" activeClassName="active"> Latest Tracklists </IndexLink></li>
-								<li><IndexLink to="/tracks" activeClassName="active"> Latest Tracks </IndexLink></li>
-								{user.isAuthorized() && <li><Link to="/add/tracklist" activeClassName="active"> Add New Tracklist </Link></li>}
-							</ul>
-							<ul className="nav navbar-nav navbar-right">
-								<li>
-									{user.isAuthorized() && 
-										<p className="navbar-text">
-											Logged in as: <i>{user.get("username")}</i> 
-										</p>
-									}
-								</li>
-								{toggleLogin}
-							</ul>
-						</div>
+				    <li className="nav-item">
+				    	<Link to="/map"
+				    		onClick={this.handleToggle}>
+				    			Map
+				    	</Link>
+				    </li>
+					
+					{user.isAuthorized() && <li className="nav-item">
+						<Link to="/add/activity" 
+							onClick={this.handleToggle} 
+							activeClassName="active"> 
+							Create activity 
+						</Link>
+						</li>}
+					
+					<li className="navbottom" >
+						{user.isAuthorized() && 
+							<p className="nav-text">
+								<span className="glyphicon glyphicon-user" style={{padding: "0.5em"}}></span>
+								<i>{user.get("username")}</i> 
+							</p>
+						}
+					</li>
+					{toggleLogin}
+				</ul>
 
-					</nav>
-				</section>
 
-				<section className="row">
+
+				<input type="checkbox" id="nav-trigger" checked={this.state.active} onChange={this.handleToggle} className="nav-trigger" />
+				<label htmlFor="nav-trigger">&#9776;</label>
+				<img src="/img/logo2.png" className="titlelogo"/>
+
+
+				<section className="site-wrap">
 					{this.props.children}
 				</section>
-			</section>
+			</div>
+
+
 		);
 	}
 

@@ -4,9 +4,30 @@ var backboneMixin = require('backbone-react-component');
 //VIEWS:
 var InfoCellView = require("./InfoCellView.jsx");
 var EditInfoCellView = require("./EditInfoCellView.jsx");
-var InfoSocialView = require("./InfoSocialView.jsx");
+
+var DatePicker = require('react-bootstrap-datetimepicker');
+var moment = require('moment');
+
+var user = require("../../models/UserModel.js");
+
 
 var InfoView = React.createClass({
+	
+
+	getInitialState: function(){
+		var datevalue = moment().format('YYYY-MM-DDTHH:mm:ss.SSS');
+
+		return {
+			datevalue: datevalue
+		}
+	},
+
+	handleDateChange: function(value){
+		this.setState({
+			datevalue: value
+		});
+		this.props.handleDateChange(value);
+	},
 
 	mixins: [backboneMixin],
 
@@ -15,31 +36,44 @@ var InfoView = React.createClass({
 		editing: React.PropTypes.bool.isRequired
 	},
 
+
+
 	render: function(){ 
+
+		var date = moment(this.props.model.get("date")).format('dddd MMMM Do YYYY HH:mm');
+
+		var modelicon = "/img/"+this.props.model.get("type")+".png";
 
 		if(this.props.editing){
 			return(
 				<div>
 					<EditInfoCellView model={this.props.model} keyName={"title"} />
-					<EditInfoCellView model={this.props.model} keyName={"artist"} />
-					<EditInfoCellView model={this.props.model} keyName={"genre"} />
-					<EditInfoCellView model={this.props.model} keyName={"length"} />
-					<EditInfoCellView model={this.props.model} keyName={"youtube"} />
-					<EditInfoCellView model={this.props.model} keyName={"soundcloud"} />
-					<EditInfoCellView model={this.props.model} keyName={"spotify"} />
+					<EditInfoCellView model={this.props.model} keyName={"description"}/>
+					<EditInfoCellView model={this.props.model} keyName={"place"}/>
+					
+					<div className="form-group">
+						<label>At what time</label>
+						<DatePicker 
+							dateTime={this.state.datevalue} 
+							onChange={this.handleDateChange} 
+							inputFormat="YYYY-MM-DD HH:mm"
+							format='YYYY-MM-DDTHH:mm:ss.SSS'
+							showToday={true}/>
+					</div>
+
 				</div>
 				)
 		} else {
 			return (		
 				<div className="panel-body">
-						
-					<h3>{this.props.model.get("title")}</h3><br/>
-					by <span className="artist">{this.props.model.get("artist")}</span>
-					<i>
-						{this.props.model.get("genre") ? <div>{this.props.model.get("genre")}</div> : ""}
-						{this.props.model.get("length") ? <div>{this.props.model.get("length")} minutes</div> : ""}
-					</i>
-					<h2><InfoSocialView model={this.props.model} marginRight="10px" /></h2>
+					
+					<h3>
+						{this.props.model.get("title")} <img src={modelicon} width="32" height="32"/>
+					</h3>
+					<h4>{date}</h4><br/>
+					<label>Place:</label> {this.props.model.get("place")}<br/>
+					<label>Description:</label> {this.props.model.get("description")}<br/>
+					<label>Host:</label><span className="artist"> {this.props.model.get("createdBy")}</span>
 				</div>
 				);
 		}

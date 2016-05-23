@@ -63,3 +63,174 @@ a > h4.remove:hover {
 	margin-top: 5.5px;
 	margin-bottom: 5.5px;
 }
+
+
+.type-selector input{
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
+}
+
+.type-selector input:active +.type-cc{opacity: .9;}
+.type-selector input:checked +.type-cc{
+	border: 2px solid green;
+	border-radius: 5px;
+    -webkit-filter: none;
+       -moz-filter: none;
+            filter: none;
+}
+.type-cc{
+    cursor:pointer;
+    background-size:contain;
+    background-repeat:no-repeat;
+    display:inline-block;
+    width:32px;height:32px;
+    -webkit-transition: all 100ms ease-in;
+       -moz-transition: all 100ms ease-in;
+            transition: all 100ms ease-in;
+    -webkit-filter: brightness(1.8) grayscale(1) opacity(.3);
+       -moz-filter: brightness(1.8) grayscale(1) opacity(.3);
+            filter: brightness(1.8) grayscale(1) opacity(.3);
+}
+.type-cc:hover{
+    -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+       -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            filter: brightness(1.2) grayscale(.5) opacity(.9);
+}
+
+.titlelogo {
+  position: fixed;
+  left: 90px; top: 15px;
+  z-index: 2;
+  width: 200px;
+  height: 50px;
+
+}
+
+.navigation {
+    list-style: none;
+    background: black;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+    padding: 0px;
+}
+
+.site-wrap {
+    min-width: 100%;
+    min-height: 100vh;
+    background-color: #fff;
+    position: relative;
+    top: 0;
+    bottom: 100%;
+    left: 0;
+    z-index: 1;
+    padding: 5em 0.2em 0.2em;
+
+    background-size: 200%;
+    overflow: hidden;
+}
+
+.nav-item {
+	width: 200px;
+}
+
+.nav-text {
+	width: 200px;
+	color:white;
+	display:block;
+	font-size: 2rem;
+	padding: 0.5em;
+}
+
+.navigation a {
+	color: white;
+	display: block;
+	padding: 1em;
+	font-size: 1.2em;
+	text-decoration: none;
+	transition: color 0.2s, background 0.5s;	
+}
+
+.nav-item a:hover {
+  color: #c74438;
+}
+
+.nav-item a:active {
+	color: #d9230f;
+}
+
+/* Nav Trigger */
+.nav-trigger {
+  /* critical styles - hide the checkbox input */
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
+}
+
+label[for="nav-trigger"] {
+  /* critical positioning styles */
+  position: fixed;
+  left: 15px; top: 15px;
+  z-index: 3;
+  
+  /* non-critical apperance styles */
+  height: 50px;
+  width: 50px;
+  cursor: pointer;
+  border-radius: 50%;
+  line-height: 47px;
+  background: #DDDDDD;
+  background-size: contain;
+  box-shadow: 0 0 3px black;
+  text-align: center;
+  font-size: 2.5rem;
+}
+
+/* Make the Magic Happen */
+.nav-trigger + label, .site-wrap, .titlelogo {
+	transition: left 0.2s;
+}
+
+.nav-trigger:checked + label {
+  left: 215px;
+}
+
+.nav-trigger:checked ~ .navigation a {
+	color: black;
+}
+
+.nav-trigger:checked ~ .titlelogo {
+	left:275px;
+}
+
+.nav-trigger:checked ~ .site-wrap {
+  left: 200px;
+  box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
+}
+
+html, body {
+    /* Without this, the body has excess horizontal scroll when the menu is open */
+
+	overflow-x: hidden;
+	max-width: 100%;
+}
+
+.navbottom {
+	position: absolute;
+	bottom: 10px;
+}
+
+.fixedContent {
+    background: none repeat scroll 0 0 #ffffff;
+    width: 100%;
+    height:200px;
+    overflow: auto;
+    padding-bottom: 10px;
+}
+
+
+
