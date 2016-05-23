@@ -1,5 +1,6 @@
 var React = require("react");
 var ReactDOM = require("react-dom");
+var PUBNUB = require("pubnub");
 
 
 var p = PUBNUB.init({
