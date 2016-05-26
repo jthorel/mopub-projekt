@@ -11,12 +11,13 @@ module.exports = React.createClass({
 	getInitialState: function(){
 		return {
 			collection: false,
-			filterString: "",
-			userPosition: "",
 			radiusFilter: 3000
 		}
 	},
 
+
+	// Before render, call to get the collection
+	// Update the collection-state when done.
 	componentWillMount: function(){
 		
 		var _this = this;
@@ -26,17 +27,17 @@ module.exports = React.createClass({
 		});
 	},
 
+	// Update state when user changes the value
 	handleFilterChange: function(e){
 		this.setState({
 			radiusFilter: e.target.value
 		});
-
-
 	},
 
+	// Render
+	// Shows a loading view while the collection-state is false.
+	// Renders a List-component with the radiusFilter-state as prop when collection-state is populated
 	render: function(){ 
-
-
 		return(
 			<div className="col-md-3">
 	            <div className="panel panel-default">
@@ -50,9 +51,8 @@ module.exports = React.createClass({
 						type="text"
 						placeholder="Radius in meters" /></h5>
 	                {this.state.collection ? 
-	                	<SimpleListView collection={this.state.collection} type="unordered" 
+	                	<SimpleListView collection={this.state.collection}
 	                		filterString={this.state.filterString}
-	                		userPosition={this.state.userPosition}
 	                		radiusFilter={this.state.radiusFilter}/>
 	                	: <LoadingView/>}
 	            </div>

@@ -5,9 +5,11 @@ var backboneMixin = require('backbone-react-component');
 var EditInfoCellView = require("../info/EditInfoCellView.jsx");
 var LoginInputView = require("../login/LoginInputView.jsx");
 
+
 var LoginFormView = React.createClass({
 
-	mixins: [backboneMixin], //Updates this.state.error if model triggers an error.
+	//Updates this.state.error if model triggers an error.
+	mixins: [backboneMixin], 
 
 	propTypes: {
 		model: React.PropTypes.object.isRequired, //Backbone.Model: UserModel
@@ -23,16 +25,22 @@ var LoginFormView = React.createClass({
 
 	render: function(){ 
 		
-		var isStateLogin = this.state.action === "login" ? true : false; //Boolean value. True if this.state.action === "login". Used for rendering
+		//Boolean value. True if this.state.action === "login". Used for rendering
+		var isStateLogin = this.state.action === "login" ? true : false; 
 
-		var error = this.state.error ? true : false; //Error is set by backboneMixin to the error-object. If there is an object, transform it to true.
+		//Error is set by backboneMixin to the error-object. If there is an object, transform it to true.
+		var error = this.state.error ? true : false; 
 
 		return(		
     		<form className="panel panel-default" ref="form" onSubmit={this.submit}>
     		
     			<div className="panel-body">
     				<h2 className="text-center"> Welcome </h2>
-    				<h2 className="text-center"><small>{isStateLogin ? "Please log in to be able to contribute." : "Please create an account to be able to contribute." }</small></h2>
+    				<h2 className="text-center">
+	    				<small>
+	    					{isStateLogin ? "Please log in to be able to contribute." : "Please create an account to be able to contribute." }
+	    				</small>
+    				</h2>
     			</div>
 
 				<div className="panel-body form-horizontal">
@@ -44,7 +52,9 @@ var LoginFormView = React.createClass({
 
     			<div className="panel-body pull-right">
 					
-        			<a href="javascript:void(0)" onClick={this.toggleAction} width="50%">{isStateLogin ? "Create account" : "Back to login" }</a>
+        			<a href="javascript:void(0)" onClick={this.toggleAction} width="50%">
+        				{isStateLogin ? "Create account" : "Back to login" }
+        			</a>
     			</div>
     		</form>
 		)
@@ -68,6 +78,7 @@ var LoginFormView = React.createClass({
 			action: this.state.action
 		}
 
+		// Callback
 		this.props.submitHandler(formData);
 
 	}

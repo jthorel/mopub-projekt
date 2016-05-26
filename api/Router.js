@@ -22,7 +22,7 @@ var isUserAuthenticated = function (req, res, next) {
 // ------------------- activities ----------------- //
 // ------------------------------------------------ //
 
-//GET ALL activityS WITHOUT USERS
+//GET ALL ACTIVITIES
 router.get("/activity", function(req, res, next){ 
     var currentDate = new Date().toISOString()
     ActivityModel.find().where('date').gt(currentDate).sort('date').exec( function(err, data){
@@ -38,7 +38,7 @@ router.get("/activity/filter/:filter", function(req, res, next){
     })
 })
 
-//GET ONE activity AND ALL USERS
+//GET ONE activity
 router.get("/activity/:id", function(req, res, next){
     ActivityModel.findById(req.params.id).populate("users.user").exec( function(err, data){
         if(err) next(err);
@@ -48,10 +48,8 @@ router.get("/activity/:id", function(req, res, next){
 
 //UPDATE / EDIT ONE activity
 router.put("/activity/:id", isUserAuthenticated,  function(req, res, next){
-    console.log(req.body);
-    console.log(req.user);
 
-    ActivityModel.findOneAndUpdate({_id: req.params.id}, req.body, {new: true}).populate("tracks.track").exec( function(err, activityModel){
+    ActivityModel.findOneAndUpdate({_id: req.params.id}, req.body, {new: true}).populate("users.user").exec( function(err, activityModel){
         if(err) next(err);
 
         if(activityModel === null){ 

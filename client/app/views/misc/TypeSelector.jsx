@@ -2,19 +2,16 @@ var React = require("react");
 var TypeCell = require("./TypeCell.jsx");
 
 
-
+// Choose type of activity
 var TypeSelector = React.createClass({
 
-
+	// Callback when changing "radio"-button
 	handleType: function(event){
 		this.props.handleType(event.target.value);
 	},
 
 	
 	render: function(){
-
-
-		
 		return (
 				
 			<form onChange={this.handleType}>

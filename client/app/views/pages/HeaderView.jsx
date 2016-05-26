@@ -1,22 +1,16 @@
 var React = require("react");
-var backboneMixin = require('backbone-react-component');
 var Link = require("react-router").Link;
 var IndexLink = require("react-router").IndexLink;
 
 var UserModel = require("../../models/UserModel.js");
 
 
+// The HeaderView is the top-component of the webapp
+// It wraps the rest of the site in a <section> with the help of the React-router
+// (this.props.children is from the Router in main.js)
 var HeaderView = React.createClass({
 	
-	mixins: [backboneMixin],
 
-
-	handleToggle: function(){
-		this.setState({
-			active: !this.state.active
-		});
-	},
-	
 	getInitialState: function() {
 		UserModel.on("all", function(){
 			this.forceUpdate();
@@ -29,7 +23,20 @@ var HeaderView = React.createClass({
 		
 	},
 
+	// Toggles the "checkbox" (menu button)
+	// Used for when clicking links, the menu should close.
+	handleToggle: function(){
+		this.setState({
+			active: !this.state.active
+		});
+	},
 
+
+	// Renders the menu, menu-button and logo.
+	// The menu is a fixed div behind the main-page.
+	// The menu-button is a fixed modified checkbox that toggles the mainpage, menubutton and logos left value.
+	// So the button moves everything to the right which shows the menu. Everything is made with CSS.
+	// The "checkbox" is also modified by a react-state so it can close when clicking on links
 	render: function() {
 		var user = this.state.user
 
@@ -81,7 +88,6 @@ var HeaderView = React.createClass({
 					</li>
 					{toggleLogin}
 				</ul>
-
 
 
 				<input type="checkbox" id="nav-trigger" checked={this.state.active} onChange={this.handleToggle} className="nav-trigger" />

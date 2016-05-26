@@ -2,7 +2,7 @@ var React = require("react");
 var Link = require("react-router").Link;
 var moment = require('moment');
 
-var UnorderedListCellView = React.createClass({
+var ListCell = React.createClass({
 
 	propTypes: {
 		model: React.PropTypes.object.isRequired //A Backbone-Model
@@ -33,4 +33,4 @@ var UnorderedListCellView = React.createClass({
 	}
 });
 
-module.exports = UnorderedListCellView;
+module.exports = ListCell;

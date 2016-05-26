@@ -25,15 +25,79 @@ module.exports = React.createClass({
 		}
 	},
 
+
+	// When the date or time is changed, update the model
 	handleDateChange: function(value){
 		this.props.model.set('date', value);
 	},
 
+
+	// Add a user to the users.collection (participants)
 	addUser: function(){
 		this.props.model.users.add(user);
 		this.props.model.save();
 	},
 
+
+	// What to render if editing is true or not
+	editing: function() {
+		if(this.state.editing){
+			return (
+				<div>
+				</div>
+			)
+		} else {
+			return <div style={{width:"100%", height:"100%"}}>
+						<h4>Participants </h4>
+						<UserList collection={this.props.model.users}/>
+						<GoogleMap position={this.props.model.get("position")} />
+						{user.isAuthorized() ? 
+						<div>
+							<h4>Chat</h4>
+							<hr/>
+							<ChatPage channel={this.props.model.get("_id")} name={user.get("username")}/>
+						</div>
+						: "" }
+						
+					</div>
+		}
+	},
+
+	// CALLBACK METHODS USED IN InfoView --------------
+	// Set editing to true
+	edit: function() {
+		this.setState({editing: true});
+
+	},
+
+	// If cancel, reset the modified values and set editing to false
+	cancel: function () {
+		this.props.model.resetToBackup();
+		this.setState({
+			editing: false
+		});
+	},
+
+	// Save the model to the api
+	save: function() {
+		this.props.model.save()
+		this.setState({
+				editing: false
+			});
+	},
+
+	// Remove the model from the api
+	delete: function() {
+		var _this = this;
+		if (confirm("Delete " + this.props.model.get("title") + "?")) {
+			this.props.model.destroy();
+			this.context.router.push("/");
+		}
+	},
+
+	//------------------------------------------
+
+	// Render the view with components
 	render: function(){ 
 		var _this = this;
 		var methods = {
@@ -54,62 +118,10 @@ module.exports = React.createClass({
 											
 				</div>
 				<div className="col-md-9">
-					<h4>Participants </h4>
 					{this.editing()}
-
-					{user.isAuthorized() ? 
-						<div>
-							<h4>Chat</h4>
-							<hr/>
-							<ChatPage channel={model.get("_id")} name={user.get("username")}/>
-						</div>
-						: "" }
 				</div>
 			</div>
 		)
-	},
-
-
-	
-	editing: function() {
-		if(this.state.editing){
-			return (
-				<div>
-				</div>
-			)
-		} else {
-			return <div style={{width:"100%", height:"100%"}}>
-						<UserList collection={this.props.model.users}/>
-						<GoogleMap position={this.props.model.get("position")} />
-						
-					</div>
-		}
-	},
-
-	edit: function() {
-		this.setState({editing: true});
-
-	},
-
-	cancel: function () {
-		this.props.model.resetToBackup();
-		this.setState({
-			editing: false
-		});
-	},
-	save: function() {
-		this.props.model.save()
-		this.setState({
-				editing: false
-			});
-
-	},
-
-	delete: function() {
-		var _this = this;
-		if (confirm("Delete " + this.props.model.get("title") + "?")) {
-			this.props.model.destroy();
-			this.context.router.push("/");
-		}
 	}
+
 });

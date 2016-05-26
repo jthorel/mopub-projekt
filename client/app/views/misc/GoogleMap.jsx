@@ -1,54 +1,50 @@
 var React = require("react");
 var ReactDOM = require("react-dom");
 
+
+// A GoogleMap component
 var GoogleMap = React.createClass({  
+    
     getDefaultProps: function () {
         return {
-            initialZoom: 15,
-            mapCenterLat: 43.6425569,
-            mapCenterLng: -79.4073126,
+            zoom: 15,
         };
     },
 
-    mapCenterLatLng: function () {
-        var props = this.props;
-        return new google.maps.LatLng(props.mapCenterLat, props.mapCenterLng);
-    },
+
 
     createMap: function() {
-
-
         var mapOptions = {
-            zoom: this.props.initialZoom,
+            zoom: this.props.zoom,
             disableDefaultUI: true
         }
-
-        if(this.props.position){
-            var actPos = new google.maps.LatLng(this.props.position[0], this.props.position[1]);
-            mapOptions.center = actPos;
-        } else {
-            mapOptions.center = this.mapCenterLatLng()
-        }        
         return new google.maps.Map(this.refs.map, mapOptions);
     },
 
+    // Callback for getting user position when viewing the collection 
     setPosition: function(position){
         this.state.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
     },
 
 
-    componentDidMount: function () {
 
+    componentDidMount: function () {
         var _this = this;
 
         var map = this.createMap();
+        this.setState({map: map});
+
+        // If the component is created with a position, create marker and center it on that position
+        // (called when viewing an activity)
         if(this.props.position){
             var actPos = new google.maps.LatLng(this.props.position[0], this.props.position[1]);
+            map.setCenter(actPos);
             var actMarker = new google.maps.Marker({position: actPos, map: map});
         }
         
-        this.setState({map: map});
-
+        // If the component is created with a callback-method handleDrag
+        // make the marker draggable and center the marker when dragging the map
+        // (called when creating a new activity)
         if(this.props.handleDrag){
 
             actMarker.setDraggable(true);
@@ -64,13 +60,9 @@ var GoogleMap = React.createClass({
             });
         }
 
-        if(this.props.type){
-            actMarker.setIcon({
-                url: '/img/'+this.props.type+'.png'
-            });
-        }
-
-
+        // If created with a collection.
+        // Iterate the collection and add markers with the model-type icon
+        // Called when viewing the "Map"-page
         if(this.props.collection){
             navigator.geolocation.getCurrentPosition(this.setPosition);
 
@@ -93,12 +85,14 @@ var GoogleMap = React.createClass({
             });
         }
 
+        // Change zoom if created with zoom-prop
         if(this.props.zoom){
             map.setZoom(this.props.zoom);
         }
 
     },
 
+    // Get center of the map and callback the position
     getCenter: function() {
         var center = this.state.map.getCenter();
         this.props.setCenter(center);

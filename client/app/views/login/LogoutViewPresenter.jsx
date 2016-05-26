@@ -11,6 +11,7 @@ var LogoutView = React.createClass({
 		router: React.PropTypes.object
 	},
 
+	// When mounted, destroy session and redirect to frontpage
 	componentDidMount: function() {
 		var _this = this;
 		console.log(this.context);

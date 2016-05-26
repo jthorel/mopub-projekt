@@ -8,19 +8,21 @@ var userModel = require("../../models/UserModel.js");
 
 module.exports = React.createClass({
 
+
 	componentDidMount: function() {
 		if(userModel.isAuthorized()){
 			this.props.history.push("/");
 		}
 	},
 
-	render: function(){ 
 
+	render: function(){ 
 		return(		
         	<LoginFormView model={userModel} submitHandler={this.submitHandler} />
 		)
 	},
 
+	// Callback to save the model and redirect to frontpage
 	submitHandler: function(formData){
 		var _this = this;
 

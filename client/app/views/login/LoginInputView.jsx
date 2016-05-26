@@ -10,6 +10,7 @@ var LoginInputView = React.createClass({
 		error: React.PropTypes.bool.isRequired
 	},
 
+	// Renders two inputs, if the prop error is true the css-class changes to has-error
 	render: function() {
 
 		return (

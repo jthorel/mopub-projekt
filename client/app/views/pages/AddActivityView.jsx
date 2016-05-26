@@ -17,14 +17,15 @@ module.exports = React.createClass({
 		router: React.PropTypes.object
 	},
 
+	// Create a new model
 	getInitialState: function() {
 		return {
 			model: ActivityStore.getNew(),
 			position: '',
-
 		}
 	},
 
+	// When the position is found, set the position state
 	setPosition: function(position) {
 		var gpos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 		this.setState({
@@ -32,29 +33,35 @@ module.exports = React.createClass({
 		});
 	},
 
+	// Try to get the position
 	componentDidMount: function(){
 		navigator.geolocation.getCurrentPosition(this.setPosition);
 	},
 
+
+	// Update the position in the model when dragged in the map, callback method in GoogleMap-view
 	handleDrag: function(position) {
 		this.setState({
 			position: [position.lat(), position.lng()]
 		});
 	},
 
+	// Update the type in the model, callback method in TypeSelector
 	handleType: function(type) {
 		this.setState({
 			type: type
 		});
 	},
 
+	// Update the date and time in the model, callback method in InfoView
 	handleDateChange: function(value){
 		this.state.model.set('date', value);
 	},
 
 
-	render: function(){ 
 
+	// Render
+	render: function(){ 
 		var _this = this;
 
 		return(
@@ -83,6 +90,7 @@ module.exports = React.createClass({
 	},
 
 
+	// Save the model to the api/database, callback method in InfoView / ButtonGroupView
 	save: function() {
 		var _this = this;
 		this.state.model.set('position', this.state.position);

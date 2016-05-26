@@ -1,7 +1,9 @@
 var express = require("express");
 var app = express();
 
+// THE WEBSITE
 app.use(express.static('client'));
+
 //MONGOOSE
 var mongoose = require("mongoose");
 mongoose.set("debug", true);

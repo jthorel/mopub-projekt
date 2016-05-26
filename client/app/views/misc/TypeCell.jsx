@@ -1,5 +1,6 @@
 var React = require("react");
 
+// Modified radio-button 
 var TypeCell = React.createClass({
 
 	render: function(){
@@ -12,7 +13,6 @@ var TypeCell = React.createClass({
         	);
 	}
 	
-
 });
 
 module.exports = TypeCell;

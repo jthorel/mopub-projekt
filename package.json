@@ -8,7 +8,6 @@
   "scripts": {
     "dev": "watchify client/app/main.js --outfile client/bundled.js  --debug -v --poll -d -t reactify",
     "prestart": "browserify client/app/main.js -o client/bundled.js --debug -v --poll -d -t reactify && uglifyjs client/bundled.js -o client/bundled.js",
-    "build": "browserify client/app/main.js -o client/bundled.js --debug -v --poll -d -t reactify",
     "start": "node index"
   },
   "dependencies": {

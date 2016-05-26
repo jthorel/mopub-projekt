@@ -3,16 +3,12 @@ var ReactDOM = require("react-dom");
 var PUBNUB = require("pubnub");
 
 
-var p = PUBNUB.init({
-	publish_key: 'pub-c-c1b074c3-0a88-4f55-a517-a079027dea45',
-	subscribe_key: 'sub-c-c38ad2c0-0fbd-11e6-a6c8-0619f8945a4f',
-	error: function(error) {
-		console.log(error)
-	}
-});
+// CHAT-COMPONENT
+// Last-minute add-on
+// Mostly reused lab3 without the compass-headings.
 
+// A message in the message-list
 var Message = React.createClass({
-
 	render: function() {
 		return (
 			<div className="commentbox">
@@ -20,15 +16,12 @@ var Message = React.createClass({
 			</div>
 		);
 	}
-
 });
 
 
+// Render a list of messages from the array props.data
 var MessageList = React.createClass({
-
 	render: function() {
-
-
 		var messages = this.props.data.map(function(c){
 			return (
 				<Message >
@@ -43,9 +36,10 @@ var MessageList = React.createClass({
 			</div>
 		);
 	}
-
 });
 
+
+// Send message form
 var MessageForm = React.createClass({
 
 	getInitialState: function(){
@@ -54,9 +48,9 @@ var MessageForm = React.createClass({
 		};
 	},
 
+	// When submitting, use the callback method
 	handleSubmit: function(e){
 		e.preventDefault();
-
 		this.props.submitMethod(this.state.text);
 		this.setState({
 			text:''
@@ -81,9 +75,6 @@ var MessageForm = React.createClass({
 								<input type="submit" className="btn btn-default" value="Send"/>
 							</span>
 					</div>
-						
-
-
 				</form>
 			</div>
 		);
@@ -93,36 +84,52 @@ var MessageForm = React.createClass({
 });
 
 
+// Middle component to fix scrolling
 var MessageView = React.createClass({
 
-	render: function() {
-
-		return (
-			<div className="content-padded">
-				<MessageList data={this.props.data}/>
-			</div>
-		);
-	}
-
-});
-
-
-var ChatPage = React.createClass({
-
+	// Scroll to bottom when new messages arrive
 	componentDidUpdate: function() {
 		var node = ReactDOM.findDOMNode(this);
 		node.scrollTop = node.scrollHeight;
 
 	},
 
+	render: function() {
+		return (
+			<div className="fixedContent">
+				<div className="content-padded">
+					<MessageList data={this.props.data}/>
+				</div>
+			</div>
+		);
+	}
+});
+
+
+var ChatComponent = React.createClass({
+
 	getInitialState: function(){
 		return {
-			messages: []
+			messages: [],
+			p: PUBNUB.init({
+				publish_key: 'pub-c-c1b074c3-0a88-4f55-a517-a079027dea45',
+				subscribe_key: 'sub-c-c38ad2c0-0fbd-11e6-a6c8-0619f8945a4f',
+				error: function(error) {
+					console.log(error)
+				}
+			})
 		};
 	},
 
+	propTypes: {
+		// The component will be called with a channel prop
+		// channel is the id of the activity-model
+		channel: React.PropTypes.string.isRequired
+	},
+
+	// Get the history and set the state with the history-array
 	componentWillMount: function() {
-		p.history({
+		this.state.p.history({
 			channel: this.props.channel,
 			count: 10,
 			callback: function(m){
@@ -134,8 +141,13 @@ var ChatPage = React.createClass({
 
 	},
 
+	// Subscribe to updates from the channel
+	// If a new message arrives, add it to message array and update the state
+	// (Pushing to an array in a state goes against the React workflow. So basically the new message
+	// gets concatenated into the old array so a new array is created, and the state is updated with
+	// the new array.)
 	componentDidMount: function() {
-		p.subscribe({
+		this.state.p.subscribe({
 			channel: this.props.channel,
 			message: function(m){
 				this.setState({
@@ -151,62 +163,33 @@ var ChatPage = React.createClass({
 		
 	},
 
-	componentWillReceiveProps: function(nextProps) {
 
-	},
-
+	// Unsubscribe
 	componentWillUnmount: function() {
-
-		p.unsubscribe({
+		this.state.p.unsubscribe({
 			channel: this.props.channel,
 		});
 	},
-	
-	render: function(){
-		return(
-			<div className="fixedContent">
-				<MessageView data={this.state.messages} />			
-			</div>
-		);
-	}
-});
 
-var HomePage = React.createClass({
-	getInitialState: function(){
-		return {
-		}
-	},	
 
-	componentDidMount: function(){
-
-	},
-
+	// Send message to pubnub, callbackmethod from MessageForm-component
 	submitComment: function(message, name) {
-
 		var m = this.props.name +": "+message;
-		p.publish({
+		this.state.p.publish({
 			channel: this.props.channel,
 			message: {name: this.props.name, message: m}
 		});
 
 	},
-
-	titleTextChange: function(name) {
-		this.setState({
-			name: name
-		});
-	},
 	
-
-	render: function() {
-
-		return (
+	render: function(){
+		return(
 			<div>
-				<ChatPage channel={this.props.channel}/>
-				<MessageForm submitMethod={this.submitComment} channel={this.props.channel}/>
+				<MessageView data={this.state.messages} />			
+				<MessageForm submitMethod={this.submitComment}/>
 			</div>
 		);
 	}
 });
 
-module.exports = HomePage;
+module.exports = ChatComponent;

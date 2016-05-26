@@ -120,6 +120,7 @@ a > h4.remove:hover {
     padding: 0px;
 }
 
+
 .site-wrap {
     min-width: 100%;
     min-height: 100vh;
@@ -164,20 +165,18 @@ a > h4.remove:hover {
 	color: #d9230f;
 }
 
-/* Nav Trigger */
+
 .nav-trigger {
-  /* critical styles - hide the checkbox input */
   position: absolute;
   clip: rect(0, 0, 0, 0);
 }
 
 label[for="nav-trigger"] {
-  /* critical positioning styles */
+
   position: fixed;
   left: 15px; top: 15px;
   z-index: 3;
   
-  /* non-critical apperance styles */
   height: 50px;
   width: 50px;
   cursor: pointer;
@@ -190,7 +189,6 @@ label[for="nav-trigger"] {
   font-size: 2.5rem;
 }
 
-/* Make the Magic Happen */
 .nav-trigger + label, .site-wrap, .titlelogo {
 	transition: left 0.2s;
 }
@@ -213,8 +211,6 @@ label[for="nav-trigger"] {
 }
 
 html, body {
-    /* Without this, the body has excess horizontal scroll when the menu is open */
-
 	overflow-x: hidden;
 	max-width: 100%;
 }

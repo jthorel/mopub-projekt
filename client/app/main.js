@@ -17,6 +17,11 @@ var LogoutViewPresenter = require("./views/login/LogoutViewPresenter.jsx");
 var MapView = require("./views/pages/MapView.jsx");
 var ChatPage = require("./views/pages/ChatPage.jsx");
 
+// Main
+// A ReactRouter
+// Routes to components from the URL
+// HeaderView is the top component as it wraps the rest of the site.
+
 ReactDOM.render(
 	(
 		<Router history={HashHistory} >

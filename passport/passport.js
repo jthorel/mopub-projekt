@@ -3,6 +3,7 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var UserModel = require("../api/UserModel.js");
 
+// Very simple and unsecure user auth
 passport.use(new LocalStrategy(
 	function(username, password, done) {
 		UserModel.findOne({ username: username }, function (err, user) {

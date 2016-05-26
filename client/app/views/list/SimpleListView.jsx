@@ -2,7 +2,7 @@ var React = require("react");
 var backboneMixin = require('backbone-react-component');
 
 //VIEWS:
-var SimpleListUnorderedCellView = require("./cell/SimpleListUnorderedCellView.jsx");
+var SimpleListCell = require("./SimpleListCell.jsx");
 var LoadingView = require("../misc/LoadingView.jsx");
 
 
@@ -18,10 +18,11 @@ var SimpleListView = React.createClass({
 	},
 
 	propTypes: {
-		collection: React.PropTypes.object.isRequired, //A Backbone-Collection of tracks
-		type: React.PropTypes.string.isRequired 
+		collection: React.PropTypes.object.isRequired, //A Backbone-collection of activity-models
 	},
 
+
+	// Check if activity is inside the range filter
 	insideRadius: function(actPos, filter){
 		var googlePos = new google.maps.LatLng(actPos[0], actPos[1]);
 		var distance = google.maps.geometry.spherical.computeDistanceBetween(this.state.userPosition, googlePos);
@@ -33,6 +34,8 @@ var SimpleListView = React.createClass({
 
 	},
 
+
+	// Populate the list from the activity-collection and add the ones inside the range
 	setRows: function(radiusFilter) {
 		var _this = this;
 		if(this.props.collection.length === 0) {
@@ -43,7 +46,7 @@ var SimpleListView = React.createClass({
 					if(!_this.insideRadius(model.get("position"), radiusFilter)){
 						return;
 					}
-					return <SimpleListUnorderedCellView model={model} key={model.id} />
+					return <SimpleListCell model={model} key={model.id} />
 				});
 
 		} else {
@@ -54,6 +57,8 @@ var SimpleListView = React.createClass({
 		});
 	},
 
+
+	// getCurrentPosition-callback
 	getUserPosition: function(position){
 		var _this = this;
 
@@ -62,26 +67,23 @@ var SimpleListView = React.createClass({
 			userPosition: userPosition
 		});
 		this.setRows(this.props.radiusFilter);
-
-
 	},	
 
 
-
+	// Try to get the user position. If/when success the userposition-state is updated and rows populated
 	componentDidMount: function(){
 		navigator.geolocation.getCurrentPosition(this.getUserPosition);
 
 	},
 
-
-
+	// Executed when range-filter is changed by user. Updates the rows.
 	componentWillReceiveProps: function(nextProps){
 		this.setRows(nextProps.radiusFilter)
 	},
 
 
+	// Render, while rows-state is empty a loading screen shows.
 	render: function(){
-
 		return (
 			<div className="list-group">
 				{this.state.rows ? this.state.rows : <LoadingView/>}

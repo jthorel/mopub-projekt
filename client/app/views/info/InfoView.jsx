@@ -4,31 +4,14 @@ var backboneMixin = require('backbone-react-component');
 //VIEWS:
 var InfoCellView = require("./InfoCellView.jsx");
 var EditInfoCellView = require("./EditInfoCellView.jsx");
-
 var DatePicker = require('react-bootstrap-datetimepicker');
 var moment = require('moment');
-
 var user = require("../../models/UserModel.js");
 
 
+// INFOVIEW COMPONENT
+// Show/edit info about an activity-model.
 var InfoView = React.createClass({
-	
-
-	getInitialState: function(){
-		var datevalue = moment().format('YYYY-MM-DDTHH:mm:ss.SSS');
-
-		return {
-			datevalue: datevalue
-		}
-	},
-
-	handleDateChange: function(value){
-		this.setState({
-			datevalue: value
-		});
-		this.props.handleDateChange(value);
-	},
-
 	mixins: [backboneMixin],
 
 	propTypes: {
@@ -37,10 +20,28 @@ var InfoView = React.createClass({
 	},
 
 
+	getInitialState: function(){
+
+		// Set initial value for the datepicker component
+		var datevalue = moment().format('YYYY-MM-DDTHH:mm:ss.SSS');
+		return {
+			datevalue: datevalue
+		}
+	},
+
+
+	handleDateChange: function(value){
+		// Update state and run callback changing the model
+		this.setState({
+			datevalue: value
+		});
+		this.props.handleDateChange(value);
+	},
+
 
 	render: function(){ 
 
-		var date = moment(this.props.model.get("date")).format('dddd MMMM Do YYYY HH:mm');
+		
 
 		var modelicon = "/img/"+this.props.model.get("type")+".png";
 
@@ -64,9 +65,10 @@ var InfoView = React.createClass({
 				</div>
 				)
 		} else {
+
+			var date = moment(this.props.model.get("date")).format('dddd MMMM Do YYYY HH:mm');
 			return (		
-				<div className="panel-body">
-					
+				<div className="panel-body">		
 					<h3>
 						{this.props.model.get("title")} <img src={modelicon} width="32" height="32"/>
 					</h3>
