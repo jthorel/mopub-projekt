@@ -2,10 +2,18 @@ var React = require("react");
 var ReactDOM = require("react-dom");
 var PUBNUB = require("pubnub");
 
-
+var p = PUBNUB.init({
+			publish_key: 'pub-c-c1b074c3-0a88-4f55-a517-a079027dea45',
+			subscribe_key: 'sub-c-c38ad2c0-0fbd-11e6-a6c8-0619f8945a4f',
+			error: function(error) {
+				console.log(error)
+			}
+		});
 // CHAT-COMPONENT
 // Last-minute add-on
 // Mostly reused lab3 without the compass-headings.
+// Will warn for key, as every child in array should have key. But the messages in pubnub
+// doesnt have any unique properties to assign a key.
 
 // A message in the message-list
 var Message = React.createClass({
@@ -111,13 +119,7 @@ var ChatComponent = React.createClass({
 	getInitialState: function(){
 		return {
 			messages: [],
-			p: PUBNUB.init({
-				publish_key: 'pub-c-c1b074c3-0a88-4f55-a517-a079027dea45',
-				subscribe_key: 'sub-c-c38ad2c0-0fbd-11e6-a6c8-0619f8945a4f',
-				error: function(error) {
-					console.log(error)
-				}
-			})
+			
 		};
 	},
 
@@ -127,9 +129,10 @@ var ChatComponent = React.createClass({
 		channel: React.PropTypes.string.isRequired
 	},
 
+
 	// Get the history and set the state with the history-array
 	componentWillMount: function() {
-		this.state.p.history({
+		p.history({
 			channel: this.props.channel,
 			count: 10,
 			callback: function(m){
@@ -147,7 +150,7 @@ var ChatComponent = React.createClass({
 	// gets concatenated into the old array so a new array is created, and the state is updated with
 	// the new array.)
 	componentDidMount: function() {
-		this.state.p.subscribe({
+		p.subscribe({
 			channel: this.props.channel,
 			message: function(m){
 				this.setState({
@@ -166,7 +169,7 @@ var ChatComponent = React.createClass({
 
 	// Unsubscribe
 	componentWillUnmount: function() {
-		this.state.p.unsubscribe({
+		p.unsubscribe({
 			channel: this.props.channel,
 		});
 	},
@@ -175,7 +178,7 @@ var ChatComponent = React.createClass({
 	// Send message to pubnub, callbackmethod from MessageForm-component
 	submitComment: function(message, name) {
 		var m = this.props.name +": "+message;
-		this.state.p.publish({
+		p.publish({
 			channel: this.props.channel,
 			message: {name: this.props.name, message: m}
 		});
